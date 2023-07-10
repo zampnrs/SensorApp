@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SensorApp</string>
+
+    <string name="temperature_label">%.2f °C</string>
+    <string name="humidity_label">%.2f %%</string>
+    <string name="heat_index_label">%.2f °C</string>
+    <string name="angle_label">%d °</string>
+
+    <string name="label_equal">=</string>
+    <string name="label_plus">+</string>
+</resources>
