@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -31,36 +29,11 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel()
 ) {
-    var angleValue by remember {
-        mutableStateOf(0)
-    }
-
-    var temperatureValue by remember {
-        mutableStateOf(0f)
-    }
-    
-    var humidityValue by remember {
-        mutableStateOf(0f)
-    }
-
-    var heatIndexValue by remember {
-        mutableStateOf(0f)
-    }
+    val dht11 by homeViewModel.dht11.collectAsState()
+    val servoMotor by homeViewModel.servoMotor.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
         homeViewModel.connectToServer()
-    }
-
-    homeViewModel.apply {
-        temperature.value.let {
-            temperatureValue = it
-        }
-        humidity.value.let {
-            humidityValue = it
-        }
-        heatIndex.value.let {
-            heatIndexValue = it
-        }
     }
     
     Column(
@@ -76,7 +49,7 @@ fun HomeScreen(
         ) {
             Row {
                 Text(
-                    text = stringResource(R.string.temperature_label, temperatureValue),
+                    text = stringResource(R.string.temperature_label, dht11.temperature),
                     fontSize = fontSizeResource(id = R.dimen.default_text_size)
                 )
                 Image(
@@ -92,7 +65,7 @@ fun HomeScreen(
 
             Row {
                 Text(
-                    text = stringResource(R.string.humidity_label, humidityValue),
+                    text = stringResource(R.string.humidity_label, dht11.humidity),
                     fontSize = fontSizeResource(id = R.dimen.default_text_size)
                 )
                 Image(
@@ -108,7 +81,7 @@ fun HomeScreen(
             
             Row {
                 Text(
-                    text = stringResource(R.string.heat_index_label, heatIndexValue),
+                    text = stringResource(R.string.heat_index_label, dht11.heatIndex),
                     fontSize = fontSizeResource(id = R.dimen.default_text_size)
                 )
                 Image(
@@ -121,7 +94,7 @@ fun HomeScreen(
         Box {
             Text(
                 modifier = Modifier.align(Alignment.Center),
-                text = stringResource(R.string.angle_label, angleValue),
+                text = stringResource(R.string.angle_label, servoMotor),
                 fontSize = fontSizeResource(id = R.dimen.default_text_size)
             )
 
@@ -130,12 +103,7 @@ fun HomeScreen(
                     .fillMaxWidth(0.9f)
                     .fillMaxHeight(0.5f)
             ) { angle ->
-                angle.toDegrees().let {
-                    if (it != angleValue) {
-                        angleValue = it
-                        homeViewModel.publishServoAngle(it)
-                    }
-                }
+                homeViewModel.rotateServo(angle.toDegrees())
             }
         }
     }
