@@ -29,11 +29,10 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel()
 ) {
-    val dht11 by homeViewModel.dht11.collectAsState()
-    val servoMotor by homeViewModel.servoMotor.collectAsState()
+    val state by homeViewModel.state.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        homeViewModel.connectToServer()
+        homeViewModel.intent(HomeContract.Intent.StartConnection)
     }
     
     Column(
@@ -41,7 +40,6 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        
         Row(
             horizontalArrangement = Arrangement.spacedBy(
                 dimensionResource(id = R.dimen.default_space)
@@ -49,7 +47,7 @@ fun HomeScreen(
         ) {
             Row {
                 Text(
-                    text = stringResource(R.string.temperature_label, dht11.temperature),
+                    text = stringResource(R.string.temperature_label, state.dht11.temperature),
                     fontSize = fontSizeResource(id = R.dimen.default_text_size)
                 )
                 Image(
@@ -65,7 +63,7 @@ fun HomeScreen(
 
             Row {
                 Text(
-                    text = stringResource(R.string.humidity_label, dht11.humidity),
+                    text = stringResource(R.string.humidity_label, state.dht11.humidity),
                     fontSize = fontSizeResource(id = R.dimen.default_text_size)
                 )
                 Image(
@@ -81,7 +79,7 @@ fun HomeScreen(
             
             Row {
                 Text(
-                    text = stringResource(R.string.heat_index_label, dht11.heatIndex),
+                    text = stringResource(R.string.heat_index_label, state.dht11.heatIndex),
                     fontSize = fontSizeResource(id = R.dimen.default_text_size)
                 )
                 Image(
@@ -94,7 +92,7 @@ fun HomeScreen(
         Box {
             Text(
                 modifier = Modifier.align(Alignment.Center),
-                text = stringResource(R.string.angle_label, servoMotor),
+                text = stringResource(R.string.angle_label, state.servoMotor),
                 fontSize = fontSizeResource(id = R.dimen.default_text_size)
             )
 
@@ -103,7 +101,7 @@ fun HomeScreen(
                     .fillMaxWidth(0.9f)
                     .fillMaxHeight(0.5f)
             ) { angle ->
-                homeViewModel.rotateServo(angle.toDegrees())
+                homeViewModel.intent(HomeContract.Intent.RotateServo(angle.toDegrees()))
             }
         }
     }
