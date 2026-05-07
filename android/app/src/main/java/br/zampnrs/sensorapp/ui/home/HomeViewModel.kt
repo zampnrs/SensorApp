@@ -5,9 +5,7 @@ import br.zampnrs.sensorapp.data.mqtt.MqttConstants
 import br.zampnrs.sensorapp.data.mqtt.MqttRepository
 import br.zampnrs.sensorapp.data.mqtt.MqttConnectionListener
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -17,19 +15,16 @@ class HomeViewModel @Inject constructor(
     private val mqttRepository: MqttRepository
 ): ViewModel() {
 
-    internal val _state = MutableStateFlow(HomeContract.State())
+    internal val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
 
-    internal val _viewEffect = MutableSharedFlow<HomeContract.ViewEffect>()
-    val viewEffect = _viewEffect.asSharedFlow()
-
-    fun intent(intent: HomeContract.Intent) {
+    fun intent(intent: HomeIntent) {
         when (intent) {
-            is HomeContract.Intent.StartConnection -> {
+            is HomeIntent.StartConnection -> {
                 connectToServer()
             }
 
-            is HomeContract.Intent.RotateServo -> {
+            is HomeIntent.RotateServo -> {
                 rotateServo(intent.angle)
             }
         }

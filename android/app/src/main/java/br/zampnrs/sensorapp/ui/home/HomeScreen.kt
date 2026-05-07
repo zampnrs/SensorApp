@@ -32,9 +32,23 @@ fun HomeScreen(
     val state by homeViewModel.state.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        homeViewModel.intent(HomeContract.Intent.StartConnection)
+        homeViewModel.intent(HomeIntent.StartConnection)
     }
-    
+
+    HomeScreenContent(
+        modifier = modifier,
+        state = state
+    ) { intent ->
+        homeViewModel.intent(intent)
+    }
+}
+
+@Composable
+fun HomeScreenContent(
+    modifier: Modifier,
+    state: HomeState,
+    intent: (HomeIntent) -> Unit
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -55,7 +69,7 @@ fun HomeScreen(
                     contentDescription = ""
                 )
             }
-            
+
             Text(
                 text = stringResource(id = R.string.label_plus),
                 fontSize = fontSizeResource(id = R.dimen.default_text_size)
@@ -76,7 +90,7 @@ fun HomeScreen(
                 text = stringResource(id = R.string.label_equal),
                 fontSize = fontSizeResource(id = R.dimen.default_text_size)
             )
-            
+
             Row {
                 Text(
                     text = stringResource(R.string.heat_index_label, state.dht11.heatIndex),
@@ -92,7 +106,7 @@ fun HomeScreen(
         Box {
             Text(
                 modifier = Modifier.align(Alignment.Center),
-                text = stringResource(R.string.angle_label, state.servoMotor),
+                text = stringResource(R.string.angle_label, state.servoMotor.rotationAngle),
                 fontSize = fontSizeResource(id = R.dimen.default_text_size)
             )
 
@@ -101,7 +115,7 @@ fun HomeScreen(
                     .fillMaxWidth(0.9f)
                     .fillMaxHeight(0.5f)
             ) { angle ->
-                homeViewModel.intent(HomeContract.Intent.RotateServo(angle.toDegrees()))
+                intent(HomeIntent.RotateServo(angle.toDegrees()))
             }
         }
     }
@@ -110,5 +124,8 @@ fun HomeScreen(
 @Composable
 @Preview(showBackground = true)
 fun HomeScreenPreview() {
-    HomeScreen(modifier = Modifier.fillMaxSize())
+    HomeScreenContent(
+        modifier = Modifier.fillMaxSize(),
+        state = HomeState()
+    ) {}
 }
