@@ -1,4 +1,4 @@
-package br.zampnrs.sensorapp.ui.home
+package br.zampnrs.sensorapp.ui.components
 
 import android.view.MotionEvent
 import androidx.compose.foundation.Canvas

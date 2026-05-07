@@ -4,14 +4,11 @@ import androidx.lifecycle.ViewModel
 import br.zampnrs.sensorapp.data.mqtt.MqttConstants
 import br.zampnrs.sensorapp.data.mqtt.MqttRepository
 import br.zampnrs.sensorapp.data.mqtt.MqttConnectionListener
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+class HomeViewModel(
     private val mqttRepository: MqttRepository
 ): ViewModel() {
 

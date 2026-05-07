@@ -9,9 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import br.zampnrs.sensorapp.ui.home.HomeScreen
 import br.zampnrs.sensorapp.ui.theme.SensorAppTheme
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

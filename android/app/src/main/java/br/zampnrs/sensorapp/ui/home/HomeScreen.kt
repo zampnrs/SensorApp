@@ -19,15 +19,16 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import br.zampnrs.sensorapp.R
+import br.zampnrs.sensorapp.ui.components.CircularSlider
 import br.zampnrs.sensorapp.ui.extensions.fontSizeResource
 import br.zampnrs.sensorapp.ui.extensions.toDegrees
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel = viewModel()
+    homeViewModel: HomeViewModel = koinViewModel()
 ) {
     val state by homeViewModel.state.collectAsState()
 
